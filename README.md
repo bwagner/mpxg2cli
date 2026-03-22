@@ -27,6 +27,8 @@ mpxg2.py pan [l | lm | m | mr | r | p]
 
 Default: `m`. Run `pan p` once per session before using pan - it selects program 262, which enables CC110 panning control.
 
+> **Note:** Program 262 is a personal preset configured for CC110 panning. If you want to use this feature, you'll need a compatible program on your MPX-G2. Contact the author if you'd like the preset - it would need to be dumped from the device first.
+
 ### Toggle effect button
 
 ```

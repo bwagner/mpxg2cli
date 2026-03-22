@@ -105,7 +105,7 @@ def fx(effect: str, position: str, midi_dev: str = MIDI_DEV):
         port.send(mido.Message("sysex", data=data))
 
 
-if __name__ == "__main__":
+def main():
     import argparse
     import sys
 
@@ -149,3 +149,7 @@ if __name__ == "__main__":
         print(f"Error: {e}", file=sys.stderr)
         parser.print_usage(sys.stderr)
         sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()

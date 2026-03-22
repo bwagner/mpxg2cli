@@ -25,9 +25,9 @@ mpxg2.py pc <1-300>
 mpxg2.py pan [l | lm | m | mr | r | p]
 ```
 
-Default: `m`. `p` sends program 262 once at startup to initialize panning control.
+Default: `m`. Run `pan p` once per session before using pan - it selects program 262, which enables CC110 panning control.
 
-### Toggle effect block
+### Toggle effect button
 
 ```
 mpxg2.py fx <effect> <on|off>
@@ -39,7 +39,7 @@ Effects: `delay`, `reverb`, `eff1`, `eff2`, `gain`, `bypass`
 
 | Option | Default | Description |
 |--------|---------|-------------|
-| `-d`, `--device` | `UM-ONE` | MIDI output device name (substring match) |
+| `-d`, `--device` | `UM-ONE` | MIDI output device name (case-insensitive substring match) |
 
 ## Examples
 
@@ -47,5 +47,5 @@ Effects: `delay`, `reverb`, `eff1`, `eff2`, `gain`, `bypass`
 mpxg2.py pc 262
 mpxg2.py pan l
 mpxg2.py fx reverb off
-mpxg2.py -d IAC pan r
+mpxg2.py -d iac pan r
 ```

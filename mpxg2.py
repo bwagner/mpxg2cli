@@ -11,7 +11,8 @@ Reference: https://stecrecords.com/gear/mpxg2/doc/MPXG2_MIDI_Impl.htm
 Subcommands:
   pc   <program_number>       Select program (1-300)
   pan  [position]             Set panning (l, lm, m, mr, r, p); default: m
-  fx   <effect> <on|off>      Toggle effect block
+                              Note: run 'pan p' once per session before using pan.
+  fx   <effect> <on|off>      Toggle effect button
 """
 
 import mido
@@ -34,7 +35,7 @@ PAN_POSITIONS = {
     "rm": 96,
     "r": 127,
 }
-PAN_PROG = 262  # p: set MPX-G2 to program 262 once at start
+PAN_PROG = 262  # program enabling CC110 panning; select once per session via 'pan p' before using pan
 
 # Sysex messages sampled from MPX-G2 via: receivemidi dev UM syx
 # Each entry: [on_bytes, off_bytes]
@@ -72,7 +73,7 @@ FX_POSITIONS = ["on", "off"]
 def _open_port(midi_dev: str):
     available = mido.get_output_names()
     try:
-        port_name = next(n for n in available if midi_dev in n)
+        port_name = next(n for n in available if midi_dev.lower() in n.lower())
     except StopIteration:
         raise RuntimeError(f"MIDI device {midi_dev!r} not found. Available: {available}") from None
     return mido.open_output(port_name)
@@ -108,7 +109,15 @@ if __name__ == "__main__":
     import argparse
     import sys
 
-    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    available = mido.get_output_names()
+    if sys.stdout.isatty():
+        _h, _a, _r = "\x1b[1;34m", "\x1b[1;32m", "\x1b[0m"
+        epilog = f"{_h}Available MIDI output devices:{_r}\n" + "\n".join(f"  {_a}{n}{_r}" for n in available)
+    else:
+        epilog = "Available MIDI output devices:\n" + "\n".join(f"  {n}" for n in available)
+    parser = argparse.ArgumentParser(
+        description=__doc__, epilog=epilog, formatter_class=argparse.RawDescriptionHelpFormatter
+    )
     parser.add_argument("--device", "-d", default=MIDI_DEV, help=f"MIDI output device name (default: {MIDI_DEV})")
     sub = parser.add_subparsers(dest="cmd", required=True)
 
@@ -121,10 +130,10 @@ if __name__ == "__main__":
         nargs="?",
         default="m",
         choices=sorted({*PAN_POSITIONS, "p"}),
-        help="Pan position (default: m); p sets program 262",
+        help=f"Pan position (default: m); run p once per session before panning (selects program {PAN_PROG})",
     )
 
-    p_fx = sub.add_parser("fx", help="Toggle effect block")
+    p_fx = sub.add_parser("fx", help="Toggle effect button")
     p_fx.add_argument("effect", choices=FX_NAMES, help="Effect to toggle")
     p_fx.add_argument("position", choices=FX_POSITIONS, help="on or off")
 

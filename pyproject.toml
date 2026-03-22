@@ -1,0 +1,7 @@
+[project]
+name = "mpxg2cli"
+version = "0.1.0"
+dependencies = ["mido", "python-rtmidi"]
+
+[tool.setuptools]
+py-modules = ["mpxg2"]

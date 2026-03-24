@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Distribution / packaging
+*.egg-info/
+*.egg
+dist/
+build/
+wheels/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# uv
+.uv/
+
+# Installer logs
+pip-log.txt
+
+# Unit test / coverage
+.coverage
+.pytest_cache/
+htmlcov/
+
+# mypy / pyright
+.mypy_cache/
+.pyright/
